@@ -15,7 +15,8 @@ The colour reading is a comparison aid, not a promise of identical applied colou
 5. A perceptual colour-distance function ranks the synthetic lipstick catalog.
 6. Each result opens a product page with the exact-variant Colour Passport, creator proof, customer photos, seller data and verified-purchase reviews.
 7. The selected scan or catalog shade can be sent into live lipstick, eyebrow-tint and eye-shadow previews.
-8. A separate Skin Lab places up to four selected shades side by side on a live hand, arm or other skin area. It also accepts an uploaded photo and lets the shopper reposition the strip.
+8. A separate Skin Lab freezes a camera capture or accepts an uploaded photo. The shopper selects up to four shades and clicks or drags to paint each shade on exact skin areas. Each applied shade keeps its HEX code beside the painted area.
+9. The Skin Lab adds a fit remark for every selected shade by comparing it with the shopper's saved colour reference, preferred shade families and finishes, and earlier demo purchases.
 
 ## Prototype architecture
 
@@ -23,12 +24,12 @@ The colour reading is a comparison aid, not a promise of identical applied colou
 |---|---|---|
 | Capture | Browser `getUserMedia`, frozen-frame capture, file upload, magnified picker and local Canvas pixel sampling | Native app camera module with device capability checks, exposure guidance and reference-card calibration |
 | Virtual try-on | MediaPipe Face Landmarker with Canvas overlays for lips, brows and eyelids | Versioned face model, performance monitoring and device-specific quality fallbacks |
-| Skin comparison | Camera or local photo with repositionable Canvas swatches for up to four shades | Skin-region segmentation, device calibration and controlled opacity per product formula |
+| Skin comparison | Frozen camera or local photo with pointer-painted Canvas swatches, per-shade HEX labels, undo, clear and brush sizing | Skin-region segmentation, device calibration and controlled opacity per product formula |
 | Colour processing | Local sRGB to CIELAB conversion and perceptual distance ranking | Versioned colour service with device correction, CIEDE2000, confidence scoring and observability |
 | Catalog | Static synthetic JSON in the client | Product catalog service with one Shade Passport per exact variant |
 | Seller input | Pre-filled demo fields | Guided capture workflow, reference target, automated QC and manual exception review |
 | Creator proof | One synthetic creator card | Media service that checks exact SKU, declared lighting, filter policy and disclosure fields |
-| Personalisation | Local Beauty Profile and saved shades | Consent-based profile service with preference controls and deletion |
+| Personalisation | Local saved colour, finish and family preferences plus demo purchase history used for fit remarks | Consent-based profile service with preference controls, purchase-history rules and deletion |
 | Feedback | Demo aggregate | Verified-purchase feedback tied to order item, shade, skin-depth band and expectation outcome |
 | Storage | `localStorage`; no image upload | Encrypted account data; raw capture discarded unless the user explicitly submits it |
 
