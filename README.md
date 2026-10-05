@@ -47,4 +47,4 @@ Push changes to `main`. The GitHub Actions workflow checks JavaScript syntax and
 
 ## References
 
-The virtual try-on feature was informed by [kgpgaurav/Meesho](https://github.com/kgpgaurav/Meesho). Face tracking uses [MediaPipe Face Landmarker](https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker/web_js). Project details and prototype limits are documented in [ARCHITECTURE.md](ARCHITECTURE.md).
+Face tracking uses [MediaPipe Face Landmarker](https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker/web_js). Project details and prototype limits are documented in [ARCHITECTURE.md](ARCHITECTURE.md).
