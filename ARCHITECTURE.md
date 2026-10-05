@@ -17,14 +17,15 @@ The colour reading is a comparison aid, not a promise of identical applied colou
 7. The selected scan or catalog shade can be sent into live lipstick, eyebrow-tint and eye-shadow previews.
 8. A separate Skin Lab freezes a camera capture or accepts an uploaded photo. The shopper selects up to four shades and clicks or drags to paint each shade on exact skin areas. Each applied shade keeps its HEX code beside the painted area.
 9. The Skin Lab adds a fit remark for every selected shade by comparing it with the shopper's saved colour reference, preferred shade families and finishes, and earlier demo purchases.
+10. Face try-on and Skin Lab show the current product reference, live opacity and inverse transparency values, plus close shade suggestions. Product pages add shades to the comparison tray before the shopper opens Skin Lab.
 
 ## Prototype architecture
 
 | Layer | Current demo | Production path |
 |---|---|---|
 | Capture | Browser `getUserMedia`, frozen-frame capture, file upload, magnified picker and local Canvas pixel sampling | Native app camera module with device capability checks, exposure guidance and reference-card calibration |
-| Virtual try-on | MediaPipe Face Landmarker with Canvas overlays for lips, brows and eyelids | Versioned face model, performance monitoring and device-specific quality fallbacks |
-| Skin comparison | Frozen camera or local photo with pointer-painted Canvas swatches, per-shade HEX labels, undo, clear and brush sizing | Skin-region segmentation, device calibration and controlled opacity per product formula |
+| Virtual try-on | MediaPipe Face Landmarker with Canvas overlays, product reference, nearby shade suggestions and per-region opacity controls | Versioned face model, performance monitoring and device-specific quality fallbacks |
+| Skin comparison | Frozen camera or local photo with pointer-painted Canvas swatches, per-shade HEX labels, product reference, suggestions, opacity, undo, clear and brush sizing | Skin-region segmentation, device calibration and controlled opacity per product formula |
 | Colour processing | Local sRGB to CIELAB conversion and perceptual distance ranking | Versioned colour service with device correction, CIEDE2000, confidence scoring and observability |
 | Catalog | Static synthetic JSON in the client | Product catalog service with one Shade Passport per exact variant |
 | Seller input | Pre-filled demo fields | Guided capture workflow, reference target, automated QC and manual exception review |
