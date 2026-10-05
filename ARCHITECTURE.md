@@ -8,15 +8,14 @@ The colour reading is a comparison aid, not a promise of identical applied colou
 
 ## Working prototype flow
 
-1. The shopper starts the rear camera, uploads a photo or chooses a sample.
+1. The shopper enters through a Meesho-style lipstick result page with shade, finish, rating, product-type and passport filters.
 2. A camera scan freezes the full frame. Uploads and captures both wait for the shopper to tap the exact colour area.
 3. The browser displays a magnified picker and calculates a 5 × 5 local median around the chosen pixel. Pixels that differ sharply from the centre are excluded, and transparent PNG pixels are rejected. This avoids blending an edge, highlight or empty background into the selected colour.
 4. The prototype converts the resulting sRGB value to CIELAB under a D65 reference white.
 5. A perceptual colour-distance function ranks the synthetic lipstick catalog.
-6. The shopper can ask for a more muted, lighter, deeper, warmer or cooler direction.
-7. Each result opens a Shade Passport with finish, coverage, seller capture status and creator evidence.
-8. The selected scan or catalog shade can be sent into live lipstick, eyebrow-tint and eye-shadow previews.
-9. The shopper can save a shade, compare two products, complete a short Beauty Profile and add an item to the demo bag.
+6. Each result opens a product page with the exact-variant Colour Passport, creator proof, customer photos, seller data and verified-purchase reviews.
+7. The selected scan or catalog shade can be sent into live lipstick, eyebrow-tint and eye-shadow previews.
+8. A separate Skin Lab places up to four selected shades side by side on a live hand, arm or other skin area. It also accepts an uploaded photo and lets the shopper reposition the strip.
 
 ## Prototype architecture
 
@@ -24,6 +23,7 @@ The colour reading is a comparison aid, not a promise of identical applied colou
 |---|---|---|
 | Capture | Browser `getUserMedia`, frozen-frame capture, file upload, magnified picker and local Canvas pixel sampling | Native app camera module with device capability checks, exposure guidance and reference-card calibration |
 | Virtual try-on | MediaPipe Face Landmarker with Canvas overlays for lips, brows and eyelids | Versioned face model, performance monitoring and device-specific quality fallbacks |
+| Skin comparison | Camera or local photo with repositionable Canvas swatches for up to four shades | Skin-region segmentation, device calibration and controlled opacity per product formula |
 | Colour processing | Local sRGB to CIELAB conversion and perceptual distance ranking | Versioned colour service with device correction, CIEDE2000, confidence scoring and observability |
 | Catalog | Static synthetic JSON in the client | Product catalog service with one Shade Passport per exact variant |
 | Seller input | Pre-filled demo fields | Guided capture workflow, reference target, automated QC and manual exception review |
@@ -68,7 +68,8 @@ The colour reading is a comparison aid, not a promise of identical applied colou
 ## Prototype file map
 
 - `dist/index.html`: shopping flow, dialogs and accessible page structure.
-- `dist/styles.css`: responsive Meesho-inspired interface system.
-- `dist/app.js`: capture, colour conversion, ranking, refinement, saved shades, profile and bag logic.
+- `dist/styles.css`: responsive Meesho-inspired result, product-detail and modal interface system.
+- `dist/responsive-fixes.css`: narrow-screen containment fixes.
+- `dist/app.js`: catalog filters, product pages, exact-pixel capture, ranking, multi-shade comparison and shopping interactions.
 - `dist/tryon.js`: face tracking and lipstick, brow-tint and eye-shadow compositing.
 - `dist/assets/`: original generated demo imagery.

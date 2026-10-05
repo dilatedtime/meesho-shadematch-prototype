@@ -2,235 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#5b173f">
-  <title>Meesho ShadeMatch | Concept prototype</title>
-  <meta name="description" content="A working concept for camera-assisted lipstick shade discovery, Shade Passports and creator proof.">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Meesho-inspired beauty shopping prototype with precise colour search, shade passports and live face and skin comparison.">
+  <title>Meesho Beauty · ShadeMatch concept</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="responsive-fixes.css">
 </head>
 <body>
-  <div class="top-note">Concept prototype · Demo products and creators · Colour results are approximate</div>
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="Meesho ShadeMatch home">
-      <span class="brand-word">meesho</span>
-      <span class="brand-tag">ShadeMatch</span>
-    </a>
-    <label class="global-search">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"/></svg>
-      <input id="globalSearch" type="search" placeholder="Search lipsticks, shades or colour code" autocomplete="off">
-      <kbd>⌘ K</kbd>
-    </label>
-    <nav class="header-actions" aria-label="Account actions">
-      <button class="header-button" id="tryOnButton" type="button"><span class="header-icon">◉</span><span>Live try-on</span></button>
-      <button class="header-button" id="profileButton" type="button"><span class="header-icon">♡</span><span>Beauty profile</span></button>
-      <button class="header-button" id="savedButton" type="button"><span class="header-icon">⌑</span><span>Saved <b id="savedCount">0</b></span></button>
-      <button class="header-button" id="bagButton" type="button"><span class="header-icon">▢</span><span>Bag <b id="bagCount">0</b></span></button>
-    </nav>
+    <div class="header-main shell">
+      <button class="wordmark" id="homeButton" type="button" aria-label="Return to lipstick results">meesho</button>
+      <label class="searchbox">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 5 5"></path></svg>
+        <input id="searchInput" type="search" value="lipstick" aria-label="Search products and shade codes">
+        <button id="clearSearch" type="button" aria-label="Clear search">×</button>
+      </label>
+      <div class="header-links"><span>Become a Supplier</span><span>Investor Relations</span><button type="button">♙<small>Profile</small></button><button type="button">▢<small>Cart</small></button></div>
+    </div>
+    <nav class="category-nav" aria-label="Shop categories"><div class="shell"><span>Popular</span><span>Kurti, Saree &amp; Lehenga</span><span>Women Western</span><span>Lingerie</span><span>Men</span><span>Kids &amp; Toys</span><span>Home &amp; Kitchen</span><b>Beauty &amp; Health</b><span>Jewellery &amp; Accessories</span><span>Bags &amp; Footwear</span><span>Electronics</span><span>Watches</span></div></nav>
   </header>
-
-  <main id="top">
-    <section class="intro-strip">
-      <div>
-        <span class="eyebrow">A clearer way to buy colour online</span>
-        <h1>Scan a shade. Find the closest match.</h1>
-        <p>Freeze a camera frame or upload a photo, tap the exact colour you want, then compare nearby shades and try them on live.</p>
+  <section class="shade-toolbar" aria-label="ShadeMatch tools">
+    <div class="shell shade-toolbar-inner">
+      <div class="shade-brand"><span>NEW</span><strong>ShadeMatch</strong><small>Choose by colour, then verify it</small></div>
+      <button id="scanOpen" type="button"><i>⌖</i><span><b>Scan a colour</b><small>Camera or photo</small></span></button>
+      <button id="faceOpen" type="button"><i>◉</i><span><b>Try on face</b><small>Lips, brows, eyes</small></span></button>
+      <button id="skinOpen" type="button"><i>◫</i><span><b>Compare on skin</b><small>Up to 4 shades</small></span></button>
+      <div class="active-colour"><i id="activeColourChip"></i><span>Active reference<b id="activeColourText">#9B435C</b></span></div>
+    </div>
+  </section>
+  <main>
+    <section id="listingView" class="shell listing-view">
+      <div class="listing-head">
+        <div><p class="crumbs">Home / Beauty &amp; Health / Lip Care &amp; Makeup</p><h1>Lipstick shades</h1><p><strong id="resultCount">12</strong> products matched to your search</p></div>
+        <label class="sortbox">Sort by:<select id="sortSelect"><option value="relevance">Relevance</option><option value="match">Closest shade match</option><option value="rating">Rating</option><option value="priceLow">Price: Low to High</option><option value="priceHigh">Price: High to Low</option></select></label>
       </div>
-      <div class="intro-steps" aria-label="ShadeMatch journey">
-        <span><b>01</b> Scan</span><i></i><span><b>02</b> Compare</span><i></i><span><b>03</b> Verify</span>
-      </div>
-    </section>
-
-    <section class="workspace" aria-label="Shade scanner and matching products">
-      <article class="scanner-card">
-        <div class="card-heading">
-          <div><span class="step-label">STEP 1</span><h2>Capture your reference</h2></div>
-          <span class="privacy-chip"><span></span>Processed on this device</span>
-        </div>
-
-        <div class="mode-tabs" role="tablist" aria-label="Capture mode">
-          <button class="mode-tab is-active" data-mode="camera" role="tab" aria-selected="true">Camera</button>
-          <button class="mode-tab" data-mode="upload" role="tab" aria-selected="false">Upload image</button>
-          <button class="mode-tab" data-mode="demo" role="tab" aria-selected="false">Try a sample</button>
-        </div>
-
-        <div class="capture-stage" id="captureStage">
-          <div class="stage-empty" id="stageEmpty">
-            <img src="assets/lip-products.png" alt="Three unbranded lip products">
-            <strong>Capture first, then tap the exact colour</strong>
-            <span>You choose the pixel area. ShadeMatch will not guess from the centre.</span>
-          </div>
-          <video id="cameraVideo" playsinline muted aria-label="Live camera preview"></video>
-          <canvas id="imageCanvas" aria-label="Uploaded image colour picker"></canvas>
-          <div class="scan-guide" id="scanGuide" aria-hidden="true"><span></span></div>
-          <span class="pixel-marker" id="pixelMarker" hidden aria-hidden="true"></span>
-          <canvas class="pixel-loupe" id="pixelLoupe" width="96" height="96" hidden aria-label="Magnified selected pixels"></canvas>
-          <div class="stage-badge" id="stageBadge">Camera is off</div>
-          <input id="imageInput" type="file" accept="image/*" hidden>
-        </div>
-
-        <div class="sample-row" id="sampleRow" hidden>
-          <button data-color="#A1495E" style="--sample:#A1495E" aria-label="Try Dusty Rose"></button>
-          <button data-color="#7A2838" style="--sample:#7A2838" aria-label="Try Brick Wine"></button>
-          <button data-color="#C26372" style="--sample:#C26372" aria-label="Try Rosewood"></button>
-          <button data-color="#9B3E57" style="--sample:#9B3E57" aria-label="Try Berry Pink"></button>
-          <button data-color="#B85A45" style="--sample:#B85A45" aria-label="Try Warm Terracotta"></button>
-          <button data-color="#6C3549" style="--sample:#6C3549" aria-label="Try Cocoa Plum"></button>
-        </div>
-
-        <div class="capture-actions">
-          <button class="button button-primary" id="primaryCapture" type="button">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5h3l1.5-2h7l1.5 2h3v10H4z"/><circle cx="12" cy="13.5" r="3.5"/></svg>
-            <span>Start camera</span>
-          </button>
-          <button class="button button-secondary" id="uploadButton" type="button">Choose a photo</button>
-          <button class="button button-tertiary" id="tryOnFromScan" type="button">Try colour live</button>
-        </div>
-
-        <div class="detected-panel" id="detectedPanel">
-          <div class="detected-swatch" id="detectedSwatch"></div>
-          <div class="detected-name"><span>DETECTED REFERENCE</span><strong id="detectedName">Muted berry rose</strong><button id="copyColor" type="button">Copy HEX</button></div>
-          <dl class="colour-values">
-            <div><dt>HEX</dt><dd id="hexValue">#9B435C</dd></div>
-            <div><dt>RGB</dt><dd id="rgbValue">155, 67, 92</dd></div>
-            <div><dt>LAB</dt><dd id="labValue">41, 38, 7</dd></div>
-          </dl>
-          <div class="capture-quality"><span class="quality-dot"></span><div><strong id="qualityLabel">Demo reference</strong><small id="qualityCopy">Use the camera for your own reading</small></div><b id="confidenceValue">82%</b></div>
-        </div>
-        <p class="fine-print">The picker reports a local 5 × 5 median around your chosen pixel to reduce compression noise. It represents the captured image; lighting, white balance, lip tone and finish can still change real-world appearance.</p>
-      </article>
-
-      <article class="matches-card">
-        <div class="card-heading match-heading">
-          <div><span class="step-label">STEP 2</span><h2>Closest catalog shades</h2></div>
-          <div class="result-count"><strong id="resultCount">8</strong><span>matches</span></div>
-        </div>
-        <div class="refine-bar" aria-label="Refine colour direction">
-          <span>Make it</span>
-          <button class="refine-chip is-active" data-refine="exact">Closest</button>
-          <button class="refine-chip" data-refine="muted">More muted</button>
-          <button class="refine-chip" data-refine="lighter">Lighter</button>
-          <button class="refine-chip" data-refine="deeper">Deeper</button>
-          <button class="refine-chip" data-refine="warmer">Warmer</button>
-          <button class="refine-chip" data-refine="cooler">Cooler</button>
-        </div>
-        <div class="active-reference" id="activeReference"><span style="--active:#9B435C"></span>Comparing against <b>#9B435C</b><small>using perceptual colour distance</small></div>
-        <div class="product-grid" id="productGrid" aria-live="polite"></div>
-      </article>
-    </section>
-
-    <section class="trust-section" id="proof">
-      <div class="section-title">
-        <div><span class="eyebrow">Evidence before checkout</span><h2>One shade identity, three ways to verify it</h2></div>
-        <p>A useful colour code needs context. The catalog reference, real-person demo and post-purchase feedback stay tied to the exact variant.</p>
-      </div>
-      <div class="trust-grid">
-        <article class="passport-card">
-          <div class="passport-top"><span>Shade Passport</span><b>TS-RS-142</b></div>
-          <div class="passport-body">
-            <div class="passport-swatch"></div>
-            <div><span>REFERENCE SHADE</span><h3>Rosewood Tea</h3><p>#A1495E · CIELAB 42, 37, 8</p></div>
-          </div>
-          <div class="passport-specs"><div><span>Finish</span><b>Soft matte</b></div><div><span>Coverage</span><b>Medium, buildable</b></div><div><span>Seller capture</span><b class="verified">✓ Verified</b></div></div>
-          <p class="passport-note">Reference captured with neutral target, D65-style lighting and no colour-altering filter.</p>
-        </article>
-        <article class="creator-card">
-          <img src="assets/creator-proof.png" alt="Demo beauty creator holding a muted rose lipstick">
-          <div class="creator-overlay"><span class="creator-badge">Creator proof</span><button class="play-button" id="playCreator" aria-label="Play creator demo">▶</button><div><strong>Riya · Jaipur</strong><span>Medium-deep · neutral-warm</span></div></div>
-          <div class="creator-facts"><span>Window daylight</span><span>1 coat + layered</span><span>No colour filter</span></div>
-        </article>
-        <article class="feedback-card">
-          <div class="feedback-heading"><span>Verified purchase feedback</span><strong>4.3 ★</strong></div>
-          <div class="feedback-bars"><div><span>Matched expectation</span><i><b style="width:72%"></b></i><em>72%</em></div><div><span>Close, slightly different</span><i><b style="width:21%"></b></i><em>21%</em></div><div><span>Different from reference</span><i><b style="width:7%"></b></i><em>7%</em></div></div>
-          <blockquote>“Daylight mein product page ke kaafi close tha. Mere lips par thoda deeper laga, but muted shade exactly wahi feel diya.”</blockquote>
-          <div class="feedback-meta">Demo response · medium skin · pigmented lips</div>
-        </article>
+      <div class="catalog-layout">
+        <aside class="filters" aria-label="Product filters">
+          <div class="filters-title"><b>FILTERS</b><small>Beauty products</small></div>
+          <fieldset><legend>Product type</legend><label><input type="checkbox" name="type" value="Lipstick" checked> Lipsticks</label><label><input type="checkbox" name="type" value="Tint" checked> Lip tints</label><label><input type="checkbox" name="type" value="Brow" checked> Brow colours</label></fieldset>
+          <fieldset><legend>Shade family</legend><div class="filter-pills" id="familyFilters"><button class="is-active" data-family="All">All</button><button data-family="Rose">Rose</button><button data-family="Berry">Berry</button><button data-family="Nude">Nude</button><button data-family="Red">Red</button><button data-family="Brown">Brown</button><button data-family="Mauve">Mauve</button></div></fieldset>
+          <fieldset><legend>Finish</legend><label><input type="checkbox" name="finish" value="Matte"> Matte</label><label><input type="checkbox" name="finish" value="Satin"> Satin</label><label><input type="checkbox" name="finish" value="Gloss"> Gloss</label></fieldset>
+          <fieldset><legend>Rating</legend><label><input id="ratingFour" type="checkbox"> 4.0 and above</label></fieldset>
+          <fieldset><legend>Shade Passport</legend><label><input id="verifiedOnly" type="checkbox"> Verified references only</label></fieldset>
+          <button class="text-button" id="resetFilters" type="button">Clear all filters</button>
+        </aside>
+        <section class="results-area">
+          <div class="match-banner" id="matchBanner"><span class="new-pill">SHADE SEARCH</span><div><b>Closest shades to <span id="bannerHex">#9B435C</span></b><small>Ranked using colour distance. Finish and lip tone can change the applied result.</small></div><button id="changeReference" type="button">Change reference</button></div>
+          <div class="product-grid" id="productGrid"></div><p class="empty-state" id="emptyState" hidden>No products match these filters. Clear one filter and try again.</p>
+        </section>
       </div>
     </section>
-
-    <section class="prototype-note">
-      <div><span class="eyebrow">Prototype boundary</span><h2>Useful as a comparison tool. Honest about uncertainty.</h2></div>
-      <div class="note-points"><p><b>For this demo</b> Camera pixels are sampled in-browser and compared with a synthetic catalog.</p><p><b>For a pilot</b> Sellers capture swatches with a neutral reference card; catalog colours pass QC before listing.</p><p><b>For production</b> Device correction, exposure checks and verified-purchase feedback improve the reference over time.</p></div>
+    <section id="productView" class="shell product-view" hidden>
+      <button class="back-link" id="backToResults" type="button">‹ Back to lipstick results</button><p class="crumbs" id="productCrumbs">Home / Beauty &amp; Health / Lipsticks</p>
+      <div class="product-top">
+        <section class="gallery-card"><div class="thumb-rail"><button class="active"><img src="assets/lip-products.png" alt="Product thumbnail"></button><button><img src="assets/creator-proof.png" alt="Creator application thumbnail"></button></div><div class="main-product-image"><img id="detailImage" src="assets/lip-products.png" alt="Lip colour product set"><span class="passport-badge">✓ Colour reference checked</span></div><div class="purchase-row"><button class="outline-button" type="button">♡ Add to Cart</button><button class="primary-button" type="button">Buy Now</button></div></section>
+        <section class="product-information">
+          <article class="info-card product-summary"><div class="brand-line"><span id="detailBrand">VELORA</span><b id="detailMatch">96% shade match</b></div><h1 id="detailName">Cloud Matte Lip Colour</h1><p class="shade-line"><i id="detailSwatch"></i><b id="detailShade">Rosewood Tea</b><code id="detailHex">#A1495E</code></p><div class="price-line"><strong id="detailPrice">₹179</strong><del id="detailMrp">₹299</del><span>40% off</span></div><div class="rating-line"><b id="detailRating">4.3 ★</b><span id="detailReviews">1,842 Ratings, 328 Reviews</span></div></article>
+          <article class="info-card shade-actions"><div><span class="new-pill">NEW</span><h2>Try this exact shade before buying</h2><p>Use your face or compare it beside other shades on your hand.</p></div><button id="detailFaceTry" class="primary-button" type="button">Try on face</button><button id="detailSkinTry" class="outline-button" type="button">Compare on skin</button></article>
+          <article class="info-card"><h2>Select shade</h2><div class="detail-shades" id="detailShadeOptions"></div></article>
+          <article class="info-card"><h2>Product details</h2><div class="spec-grid" id="detailSpecs"></div></article>
+        </section>
+      </div>
+      <div class="product-lower">
+        <section class="proof-column">
+          <article class="section-card passport-card"><div class="section-head"><div><span class="new-pill">COLOUR PASSPORT</span><h2>Reference for this exact variant</h2></div><b class="verified-badge">✓ Seller capture verified</b></div><div class="passport-layout"><div class="passport-swatch" id="passportSwatch"></div><dl><div><dt>Reference colour</dt><dd id="passportHex">#A1495E</dd></div><div><dt>RGB</dt><dd id="passportRgb">161, 73, 94</dd></div><div><dt>CIELAB</dt><dd id="passportLab">42, 37, 8</dd></div><div><dt>Finish</dt><dd id="passportFinish">Soft matte</dd></div><div><dt>Coverage</dt><dd>Medium, buildable</dd></div><div><dt>Capture</dt><dd>Neutral target · daylight reference</dd></div></dl></div><p class="honesty-note">The code is a product reference, not a promise of identical applied colour. Skin tone, lip pigmentation, coat count and lighting affect appearance.</p></article>
+          <article class="section-card creator-proof" id="creatorProof"><div class="creator-image"><img src="assets/creator-proof.png" alt="Creator demonstrating a lip colour"><button type="button" aria-label="Play creator proof">▶</button></div><div><span class="new-pill">CREATOR PROOF</span><h2>Riya tested this exact shade</h2><p>Medium-deep skin · neutral-warm undertone · window daylight · two coats</p><blockquote>“Muted indoors, slightly warmer in daylight. The finish stayed even after blotting.”</blockquote><a href="https://www.instagram.com/explore/tags/lipstickswatches/" target="_blank" rel="noreferrer">Open creator application reference ↗</a></div></article>
+        </section>
+        <section class="review-column">
+          <article class="section-card seller-card"><h2>Sold By</h2><div><span>▣</span><strong>AARVI BEAUTY STORE<small>4.4 ★ · 73 products · 91% on-time dispatch</small></strong><button type="button">View Shop</button></div></article>
+          <article class="section-card reviews-card"><h2>Product Ratings &amp; Reviews</h2><div class="rating-overview"><strong>4.3★<small>1,842 Ratings<br>328 Reviews</small></strong><div><p><span>Excellent</span><i style="--score:82%"></i><b>1240</b></p><p><span>Very Good</span><i style="--score:64%"></i><b>384</b></p><p><span>Good</span><i style="--score:42%"></i><b>128</b></p><p><span>Average</span><i style="--score:23%"></i><b>56</b></p><p><span>Poor</span><i class="poor" style="--score:12%"></i><b>34</b></p></div></div><div class="review-item"><div class="reviewer"><span>NS</span><b>Neha S.<small>Verified purchase · medium skin</small></b><em>5.0 ★</em></div><p>Daylight mein product page ke kaafi close tha. Mere lips par thoda deeper laga, but muted shade exactly wahi feel diya.</p><div class="review-photos"><img src="assets/lip-products.png" alt="Customer photo of product"><img src="assets/creator-proof.png" alt="Customer application photo"></div><button type="button">Helpful (52)</button></div><div class="review-item compact"><div class="reviewer"><span>AK</span><b>Anjali K.<small>Verified purchase · fair-medium skin</small></b><em>4.0 ★</em></div><p>Colour code helped me compare it with my old lipstick. One coat looked lighter than the reference.</p></div></article>
+        </section>
+      </div>
+      <section class="similar-section"><h2>Similar shades from other brands</h2><div class="product-grid compact-grid" id="similarGrid"></div></section>
     </section>
   </main>
-
-  <div class="compare-tray" id="compareTray" hidden>
-    <div><span>Compare shades</span><strong id="compareNames">Select up to 2 products</strong></div>
-    <div id="compareSwatches"></div>
-    <button class="button button-primary" id="compareButton" disabled>Compare</button>
-    <button class="tray-close" id="clearCompare" aria-label="Clear comparison">×</button>
-  </div>
-
-  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
-  <aside class="product-drawer" id="productDrawer" aria-hidden="true" aria-label="Product details">
-    <button class="drawer-close" id="drawerClose" aria-label="Close product details">×</button>
-    <div id="drawerContent"></div>
-  </aside>
-
-  <dialog id="profileDialog" class="dialog-card">
-    <button class="dialog-close" data-close="profileDialog" aria-label="Close">×</button>
-    <span class="step-label">MY BEAUTY PROFILE</span>
-    <h2>Make recommendations feel more like you</h2>
-    <p>Three quick choices stay on this device for the demo.</p>
-    <form id="profileForm">
-      <fieldset><legend>Your skin depth</legend><div class="option-grid"><label><input type="radio" name="depth" value="light" required><span>Light</span></label><label><input type="radio" name="depth" value="medium"><span>Medium</span></label><label><input type="radio" name="depth" value="deep"><span>Deep</span></label></div></fieldset>
-      <fieldset><legend>Your undertone</legend><div class="option-grid"><label><input type="radio" name="undertone" value="warm" required><span>Warm</span></label><label><input type="radio" name="undertone" value="neutral"><span>Neutral</span></label><label><input type="radio" name="undertone" value="cool"><span>Cool</span></label></div></fieldset>
-      <fieldset><legend>Your preferred finish</legend><div class="option-grid"><label><input type="radio" name="finish" value="matte" required><span>Matte</span></label><label><input type="radio" name="finish" value="satin"><span>Satin</span></label><label><input type="radio" name="finish" value="gloss"><span>Gloss</span></label></div></fieldset>
-      <button class="button button-primary button-wide" type="submit">Save my profile</button>
-    </form>
-  </dialog>
-
-  <dialog id="tryOnDialog" class="dialog-card tryon-dialog">
-    <button class="dialog-close" data-close="tryOnDialog" aria-label="Close try-on">×</button>
-    <div class="tryon-heading"><div><span class="step-label">LIVE BEAUTY TRY-ON</span><h2>See the shade on your face</h2><p>Lipstick, eye shadow and brow tint follow your face in real time.</p></div><div class="try-selected"><i id="trySelectedSwatch"></i><span>ACTIVE COLOUR<b id="trySelectedHex">#9B435C</b></span></div></div>
-    <div class="tryon-layout">
-      <div>
-        <div class="try-stage searching" id="tryOnStage">
-          <video id="tryOnVideo" playsinline muted aria-label="Live virtual try-on camera"></video>
-          <canvas id="tryOnCanvas" aria-label="Virtual makeup overlay"></canvas>
-          <div class="try-hint" id="tryOnHint">Camera is off</div>
-          <div class="face-guide" aria-hidden="true"></div>
-        </div>
-        <div class="try-actions"><button class="button button-primary" id="startTryOn" type="button">Start front camera</button><button class="button button-secondary" id="stopTryOn" type="button">Stop</button></div>
-        <p class="try-status" id="tryOnStatus">The face model loads only when you start the camera. Video stays on this device.</p>
-      </div>
-      <div class="try-controls">
-        <section class="try-region">
-          <div class="try-region-head"><label><input id="tryLipsOn" type="checkbox" checked><span></span>Lipstick</label><div class="finish-buttons" id="tryLipFinish"><button class="is-active" data-finish="matte">Matte</button><button data-finish="glossy">Glossy</button><button data-finish="sheer">Sheer</button></div></div>
-          <div class="try-swatches" id="tryLipSwatches"></div>
-          <label class="try-range"><span>Intensity</span><input id="tryLipIntensity" type="range" min="20" max="100" value="70"></label>
-        </section>
-        <section class="try-region">
-          <div class="try-region-head"><label><input id="tryBrowsOn" type="checkbox"><span></span>Eyebrow tint</label></div>
-          <div class="try-swatches" id="tryBrowSwatches"></div>
-          <label class="try-range"><span>Intensity</span><input id="tryBrowIntensity" type="range" min="10" max="75" value="34"></label>
-        </section>
-        <section class="try-region">
-          <div class="try-region-head"><label><input id="tryEyesOn" type="checkbox"><span></span>Eye shadow</label><div class="finish-buttons" id="tryEyeFinish"><button class="is-active" data-finish="matte">Matte</button><button data-finish="shimmer">Shimmer</button></div></div>
-          <div class="try-swatches" id="tryEyeSwatches"></div>
-          <label class="try-range"><span>Intensity</span><input id="tryEyeIntensity" type="range" min="10" max="85" value="45"></label>
-        </section>
-      </div>
-    </div>
-    <p class="fine-print">Virtual makeup is a placement preview, not a colour guarantee. Camera exposure, display settings and your natural lip or skin tone affect the result.</p>
-  </dialog>
-
-  <dialog id="savedDialog" class="dialog-card compact-dialog">
-    <button class="dialog-close" data-close="savedDialog" aria-label="Close">×</button>
-    <span class="step-label">SAVED ON THIS DEVICE</span><h2>Your shade references</h2><div id="savedList" class="saved-list"></div>
-  </dialog>
-
-  <dialog id="bagDialog" class="dialog-card compact-dialog">
-    <button class="dialog-close" data-close="bagDialog" aria-label="Close">×</button>
-    <span class="step-label">DEMO BAG</span><h2>Ready to check out</h2><div id="bagList" class="saved-list"></div><div class="bag-total"><span>Total</span><strong id="bagTotal">₹0</strong></div><button class="button button-primary button-wide" id="checkoutButton">Continue to checkout</button>
-  </dialog>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <footer><span>ShadeMatch concept · Built from the submitted Round 2 proposal</span><span>Camera access works on HTTPS or localhost. Images are not uploaded.</span></footer>
-  <script src="tryon.js"></script>
-  <script src="app.js"></script>
+  <div class="compare-dock" id="compareDock" hidden><div><span>SHADE COMPARE</span><b id="compareNames">Select up to 4 products</b></div><div id="compareChips"></div><button id="openSkinCompare" type="button">Compare on skin</button><button id="clearCompare" type="button" aria-label="Clear compare">×</button></div>
+  <dialog id="scanDialog" class="modal scan-modal"><button class="modal-close" data-close="scanDialog" aria-label="Close colour scanner">×</button><div class="modal-heading"><span class="new-pill">SHADEMATCH</span><h2>Scan the exact colour you want</h2><p>Capture or upload first, then tap a visible pixel. No automatic centre guess.</p></div><div class="scan-layout"><div><div class="camera-stage" id="scanStage"><video id="scanVideo" playsinline muted></video><canvas id="scanCanvas"></canvas><div class="empty-camera" id="scanEmpty"><b>Camera is off</b><span>Use soft daylight and avoid glare.</span></div><span id="scanMarker" class="pixel-marker" hidden></span><canvas id="scanLoupe" class="pixel-loupe" width="96" height="96" hidden></canvas><small id="scanStatus">Ready</small></div><input id="scanInput" type="file" accept="image/*" hidden><div class="modal-actions"><button class="primary-button" id="scanCamera" type="button">Start camera</button><button class="outline-button" id="scanUpload" type="button">Upload image</button></div></div><div class="scan-result"><span>SELECTED REFERENCE</span><div class="result-colour"><i id="scanColour"></i><div><strong id="scanHex">#9B435C</strong><small id="scanRgb">RGB 155, 67, 92</small></div></div><p id="scanQuality">Tap a product, swatch or surface pixel after capture.</p><h3>Closest catalog shades</h3><div id="scanMatches"></div><button class="primary-button full" id="applyScan" type="button">Show these results</button></div></div></dialog>
+  <dialog id="tryOnDialog" class="modal tryon-dialog"><button class="modal-close" data-close="tryOnDialog" aria-label="Close try-on">×</button><div class="modal-heading"><span class="new-pill">LIVE FACE TRY-ON</span><h2>Try lipstick, brows and eye colour</h2><p>The overlay follows your face. Use skin compare when you want several shades at once.</p></div><div class="tryon-layout"><div><div class="try-stage searching" id="tryOnStage"><video id="tryOnVideo" playsinline muted aria-label="Live face camera"></video><canvas id="tryOnCanvas" aria-label="Virtual makeup overlay"></canvas><div id="tryOnHint">Camera is off</div></div><div class="modal-actions"><button class="primary-button" id="startTryOn" type="button">Start front camera</button><button class="outline-button" id="stopTryOn" type="button">Stop</button></div><p id="tryOnStatus" class="privacy-copy">The face model loads when you start. Frames stay on this device.</p></div><div class="face-controls"><section><div class="control-head"><label><input id="tryLipsOn" type="checkbox" checked> Lipstick</label><div id="tryLipFinish"><button class="is-active" data-finish="matte">Matte</button><button data-finish="glossy">Glossy</button><button data-finish="sheer">Sheer</button></div></div><div id="tryLipSwatches" class="try-swatches"></div><input id="tryLipIntensity" type="range" min="20" max="100" value="70"></section><section><label><input id="tryBrowsOn" type="checkbox"> Eyebrow tint</label><div id="tryBrowSwatches" class="try-swatches"></div><input id="tryBrowIntensity" type="range" min="10" max="75" value="34"></section><section><div class="control-head"><label><input id="tryEyesOn" type="checkbox"> Eye shadow</label><div id="tryEyeFinish"><button class="is-active" data-finish="matte">Matte</button><button data-finish="shimmer">Shimmer</button></div></div><div id="tryEyeSwatches" class="try-swatches"></div><input id="tryEyeIntensity" type="range" min="10" max="85" value="45"></section><button class="skin-link" id="faceToSkin" type="button">Compare these colours side by side on skin</button></div></div></dialog>
+  <dialog id="skinDialog" class="modal skin-dialog"><button class="modal-close" data-close="skinDialog" aria-label="Close skin shade comparison">×</button><div class="modal-heading"><span class="new-pill">LIVE SKIN LAB</span><h2>Compare up to four shades on your skin</h2><p>Show your hand, arm or another skin area. Tap the preview to place the swatch strip.</p></div><div class="skin-layout"><div><div class="skin-stage" id="skinStage"><video id="skinVideo" playsinline muted></video><img id="skinPhoto" alt="Uploaded skin reference" hidden><canvas id="skinCanvas" aria-label="Shade comparison overlay"></canvas><div id="skinEmpty"><b>Use camera or upload a photo</b><span>Your image stays on this device.</span></div><small>Tap to position shades</small></div><input id="skinInput" type="file" accept="image/*" hidden><div class="modal-actions"><button class="primary-button" id="skinStart" type="button">Start camera</button><button class="outline-button" id="skinUpload" type="button">Upload photo</button><button class="text-button" id="skinStop" type="button">Stop</button></div></div><div class="skin-controls"><h3>1. Choose product type</h3><div class="type-tabs" id="skinType"><button class="is-active" data-type="Lipstick">Lipstick</button><button data-type="Tint">Tint</button><button data-type="Brow">Brow</button><button data-type="Eyeshadow">Eyeshadow</button></div><h3>2. Choose up to four shades</h3><div class="skin-palette" id="skinPalette"></div><h3>3. Compare</h3><div class="skin-comparison" id="skinComparison"></div><p class="honesty-note">This preview compares relative shades. Camera exposure and skin undertone affect the display.</p></div></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div><footer><div class="shell"><span>Meesho-inspired case prototype · Demo catalog and reviews</span><span>Colour and try-on results are approximate. Camera frames remain on-device.</span></div></footer>
+  <script src="tryon.js"></script><script src="app.js"></script>
 </body>
 </html>
