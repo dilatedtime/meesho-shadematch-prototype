@@ -25,6 +25,7 @@
       <kbd>⌘ K</kbd>
     </label>
     <nav class="header-actions" aria-label="Account actions">
+      <button class="header-button" id="tryOnButton" type="button"><span class="header-icon">◉</span><span>Live try-on</span></button>
       <button class="header-button" id="profileButton" type="button"><span class="header-icon">♡</span><span>Beauty profile</span></button>
       <button class="header-button" id="savedButton" type="button"><span class="header-icon">⌑</span><span>Saved <b id="savedCount">0</b></span></button>
       <button class="header-button" id="bagButton" type="button"><span class="header-icon">▢</span><span>Bag <b id="bagCount">0</b></span></button>
@@ -36,7 +37,7 @@
       <div>
         <span class="eyebrow">A clearer way to buy colour online</span>
         <h1>Scan a shade. Find the closest match.</h1>
-        <p>Use your camera or a photo to create an approximate colour reference, then compare nearby lipstick shades with seller and creator evidence.</p>
+        <p>Freeze a camera frame or upload a photo, tap the exact colour you want, then compare nearby shades and try them on live.</p>
       </div>
       <div class="intro-steps" aria-label="ShadeMatch journey">
         <span><b>01</b> Scan</span><i></i><span><b>02</b> Compare</span><i></i><span><b>03</b> Verify</span>
@@ -59,12 +60,14 @@
         <div class="capture-stage" id="captureStage">
           <div class="stage-empty" id="stageEmpty">
             <img src="assets/lip-products.png" alt="Three unbranded lip products">
-            <strong>Place the colour inside the guide</strong>
-            <span>Use soft daylight. Avoid flash, glare and coloured light.</span>
+            <strong>Capture first, then tap the exact colour</strong>
+            <span>You choose the pixel area. ShadeMatch will not guess from the centre.</span>
           </div>
           <video id="cameraVideo" playsinline muted aria-label="Live camera preview"></video>
           <canvas id="imageCanvas" aria-label="Uploaded image colour picker"></canvas>
           <div class="scan-guide" id="scanGuide" aria-hidden="true"><span></span></div>
+          <span class="pixel-marker" id="pixelMarker" hidden aria-hidden="true"></span>
+          <canvas class="pixel-loupe" id="pixelLoupe" width="96" height="96" hidden aria-label="Magnified selected pixels"></canvas>
           <div class="stage-badge" id="stageBadge">Camera is off</div>
           <input id="imageInput" type="file" accept="image/*" hidden>
         </div>
@@ -84,6 +87,7 @@
             <span>Start camera</span>
           </button>
           <button class="button button-secondary" id="uploadButton" type="button">Choose a photo</button>
+          <button class="button button-tertiary" id="tryOnFromScan" type="button">Try colour live</button>
         </div>
 
         <div class="detected-panel" id="detectedPanel">
@@ -96,7 +100,7 @@
           </dl>
           <div class="capture-quality"><span class="quality-dot"></span><div><strong id="qualityLabel">Demo reference</strong><small id="qualityCopy">Use the camera for your own reading</small></div><b id="confidenceValue">82%</b></div>
         </div>
-        <p class="fine-print">RGB describes a screen colour, not the exact applied lipstick. ShadeMatch ranks nearby catalog references; finish, lip tone, lighting and camera processing can change appearance.</p>
+        <p class="fine-print">The picker reports a local 5 × 5 median around your chosen pixel to reduce compression noise. It represents the captured image; lighting, white balance, lip tone and finish can still change real-world appearance.</p>
       </article>
 
       <article class="matches-card">
@@ -179,6 +183,41 @@
     </form>
   </dialog>
 
+  <dialog id="tryOnDialog" class="dialog-card tryon-dialog">
+    <button class="dialog-close" data-close="tryOnDialog" aria-label="Close try-on">×</button>
+    <div class="tryon-heading"><div><span class="step-label">LIVE BEAUTY TRY-ON</span><h2>See the shade on your face</h2><p>Lipstick, eye shadow and brow tint follow your face in real time.</p></div><div class="try-selected"><i id="trySelectedSwatch"></i><span>ACTIVE COLOUR<b id="trySelectedHex">#9B435C</b></span></div></div>
+    <div class="tryon-layout">
+      <div>
+        <div class="try-stage searching" id="tryOnStage">
+          <video id="tryOnVideo" playsinline muted aria-label="Live virtual try-on camera"></video>
+          <canvas id="tryOnCanvas" aria-label="Virtual makeup overlay"></canvas>
+          <div class="try-hint" id="tryOnHint">Camera is off</div>
+          <div class="face-guide" aria-hidden="true"></div>
+        </div>
+        <div class="try-actions"><button class="button button-primary" id="startTryOn" type="button">Start front camera</button><button class="button button-secondary" id="stopTryOn" type="button">Stop</button></div>
+        <p class="try-status" id="tryOnStatus">The face model loads only when you start the camera. Video stays on this device.</p>
+      </div>
+      <div class="try-controls">
+        <section class="try-region">
+          <div class="try-region-head"><label><input id="tryLipsOn" type="checkbox" checked><span></span>Lipstick</label><div class="finish-buttons" id="tryLipFinish"><button class="is-active" data-finish="matte">Matte</button><button data-finish="glossy">Glossy</button><button data-finish="sheer">Sheer</button></div></div>
+          <div class="try-swatches" id="tryLipSwatches"></div>
+          <label class="try-range"><span>Intensity</span><input id="tryLipIntensity" type="range" min="20" max="100" value="70"></label>
+        </section>
+        <section class="try-region">
+          <div class="try-region-head"><label><input id="tryBrowsOn" type="checkbox"><span></span>Eyebrow tint</label></div>
+          <div class="try-swatches" id="tryBrowSwatches"></div>
+          <label class="try-range"><span>Intensity</span><input id="tryBrowIntensity" type="range" min="10" max="75" value="34"></label>
+        </section>
+        <section class="try-region">
+          <div class="try-region-head"><label><input id="tryEyesOn" type="checkbox"><span></span>Eye shadow</label><div class="finish-buttons" id="tryEyeFinish"><button class="is-active" data-finish="matte">Matte</button><button data-finish="shimmer">Shimmer</button></div></div>
+          <div class="try-swatches" id="tryEyeSwatches"></div>
+          <label class="try-range"><span>Intensity</span><input id="tryEyeIntensity" type="range" min="10" max="85" value="45"></label>
+        </section>
+      </div>
+    </div>
+    <p class="fine-print">Virtual makeup is a placement preview, not a colour guarantee. Camera exposure, display settings and your natural lip or skin tone affect the result.</p>
+  </dialog>
+
   <dialog id="savedDialog" class="dialog-card compact-dialog">
     <button class="dialog-close" data-close="savedDialog" aria-label="Close">×</button>
     <span class="step-label">SAVED ON THIS DEVICE</span><h2>Your shade references</h2><div id="savedList" class="saved-list"></div>
@@ -191,6 +230,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <footer><span>ShadeMatch concept · Built from the submitted Round 2 proposal</span><span>Camera access works on HTTPS or localhost. Images are not uploaded.</span></footer>
+  <script src="tryon.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
